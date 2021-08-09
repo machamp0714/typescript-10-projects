@@ -5,7 +5,9 @@ const newYears = new Date('2022-01-01');
 const setCountdown = () => {
   const currentDate = new Date();
 
-  const diffDates = Math.floor((newYears.getTime() - currentDate.getTime()) / (24 * 60 * 60 * 1000));
+  const diffDates = Math.floor(
+    (newYears.getTime() - currentDate.getTime()) / (24 * 60 * 60 * 1000)
+  );
   const diffHours = 24 - currentDate.getHours();
   const diffMinutes = 60 - currentDate.getMinutes();
   const diffSeconds = 60 - currentDate.getSeconds();
@@ -19,10 +21,10 @@ const setCountdown = () => {
   if (hours) hours.innerText = diffHours.toString();
   if (mins) mins.innerText = diffMinutes.toString();
   if (seconds) seconds.innerText = diffSeconds.toString();
-}
+};
 
 const countdown = () => {
   setInterval(setCountdown, 1000);
-}
+};
 
 countdown();
