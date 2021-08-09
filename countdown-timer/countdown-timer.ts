@@ -1,26 +1,33 @@
 // CountDown
 
-const newYears = new Date('2022-01-01');
+const newYears = '1 Jan 2022';
 
 const setCountdown = () => {
+  const newYearsDate = new Date(newYears);
   const currentDate = new Date();
 
-  const diffDates = Math.floor(
-    (newYears.getTime() - currentDate.getTime()) / (24 * 60 * 60 * 1000)
-  );
-  const diffHours = 24 - currentDate.getHours();
-  const diffMinutes = 60 - currentDate.getMinutes();
-  const diffSeconds = 60 - currentDate.getSeconds();
+  const totalSeconds = (newYearsDate.getTime() - currentDate.getTime()) / 1000;
 
-  const dates = document.getElementById('days');
-  const hours = document.getElementById('hours');
-  const mins = document.getElementById('mins');
-  const seconds = document.getElementById('seconds');
+  const dates = Math.floor(totalSeconds / 3600 / 24);
+  const hours = Math.floor(totalSeconds / 3600) % 24;
+  const mins = Math.floor(totalSeconds / 60) % 60;
+  const seconds = Math.floor(totalSeconds) % 60;
 
-  if (dates) dates.innerText = diffDates.toString();
-  if (hours) hours.innerText = diffHours.toString();
-  if (mins) mins.innerText = diffMinutes.toString();
-  if (seconds) seconds.innerText = diffSeconds.toString();
+  const datesEl = document.getElementById('days');
+  const hoursEl = document.getElementById('hours');
+  const minsEl = document.getElementById('mins');
+  const secondsEl = document.getElementById('seconds');
+
+  if (datesEl) datesEl.innerText = format(dates);
+  if (hoursEl) hoursEl.innerText = format(hours);
+  if (minsEl) minsEl.innerText = format(mins);
+  if (secondsEl) secondsEl.innerText = format(seconds);
+};
+
+export const format = (time: number) => {
+  const result = time < 10 ? `0${time}` : time.toString();
+
+  return result;
 };
 
 const countdown = () => {
