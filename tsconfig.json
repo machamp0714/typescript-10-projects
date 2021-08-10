@@ -69,7 +69,8 @@
     "forceConsistentCasingInFileNames": true        /* Disallow inconsistently-cased references to the same file. */
   },
   "include": [
-    "countdown-timer/**/*"
+    "countdown-timer/**/*",
+    "quiZ-app/**/*"
   ],
   "exclude": [
     "dist"
