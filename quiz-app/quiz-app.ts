@@ -1,6 +1,7 @@
 // 仕様: https://10projects10hours.netlify.app/quiz-app/index.html
 
 class Quiz {
+  inputs = document.querySelectorAll<HTMLInputElement>('input');
   questions = [
     'What is the most used programming language in 2019?',
     'Who is the President of US?',
@@ -20,16 +21,13 @@ class Quiz {
     ['1996', '1995', '1994', 'none of the above'],
   ];
 
-  constructor(public page: number) {
-    this.page = page;
-  }
-
-  setup() {
+  setup(page: number) {
     const question = document.getElementById('question');
-    if (question) question.innerText = this.questions[this.page];
+    if (question) question.innerText = this.questions[page];
 
+    this.inputs.forEach((input) => (input.checked = false));
     document.querySelectorAll<HTMLLabelElement>('label').forEach((label, index) => {
-      label.innerText = this.choices[this.page][index];
+      label.innerText = this.choices[page][index];
     });
   }
 }
@@ -37,11 +35,11 @@ class Quiz {
 class App {
   page = 0;
   result = 0;
-  quiz = new Quiz(this.page);
+  quiz = new Quiz();
   inputs = document.querySelectorAll<HTMLInputElement>('input');
 
   constructor() {
-    this.quiz.setup();
+    this.quiz.setup(this.page);
     this.setEvent();
   }
 
@@ -59,7 +57,8 @@ class App {
       return;
     }
 
-    console.log('submit');
+    this.page++;
+    this.quiz.setup(this.page);
   }
 
   isAnyRadioButtonsChecked() {
