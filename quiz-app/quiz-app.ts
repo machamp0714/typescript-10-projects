@@ -8,7 +8,7 @@ class Quiz {
     'What year was JavaScript launched?',
   ];
 
-  answers = [
+  choices = [
     ['Java', 'C', 'Python', 'JavaScript'],
     ['Florin Pop', 'Donald Trump', 'Ivan Saldano', 'Mihai Andrei'],
     [
@@ -30,17 +30,18 @@ class Quiz {
     if (question) question.innerText = this.questions[this.page];
 
     document.querySelectorAll<HTMLLabelElement>('label').forEach((label, index) => {
-      label.innerText = this.answers[this.page][index];
+      label.innerText = this.choices[this.page][index];
     });
   }
 }
 
 class App {
-  page: number;
+  page = 0;
+  result = 0;
+  inputs = document.querySelectorAll<HTMLInputElement>('input');
 
   constructor() {
-    this.page = 1;
-    new Quiz(this.page - 1);
+    new Quiz(this.page);
     this.setEvent();
   }
 
@@ -53,9 +54,17 @@ class App {
     }
   }
 
-  submit() {}
+  submit() {
+    if (!this.isAnyRadioButtonsChecked()) {
+      return;
+    }
 
-  validates() {}
+    console.log('submit');
+  }
+
+  isAnyRadioButtonsChecked() {
+    return Array.from(this.inputs).some((input) => input.checked);
+  }
 }
 
 new App();
