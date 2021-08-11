@@ -26,17 +26,17 @@ class Quiz {
   }
 
   setup() {
-    const questionDOM = document.getElementById('question');
-    if (questionDOM) questionDOM.innerText = Quiz.questions[this.page];
+    const question = document.getElementById('question');
+    if (question) question.innerText = Quiz.questions[this.page];
 
-    document.querySelectorAll('label').forEach((label, index) => {
+    document.querySelectorAll<HTMLLabelElement>('label').forEach((label, index) => {
       label.innerText = Quiz.answers[this.page][index];
     });
   }
 }
 
 class App {
-  public page;
+  page: number;
 
   constructor() {
     this.page = 1;
@@ -45,10 +45,12 @@ class App {
   }
 
   setEvent() {
-    const button = document.getElementById('submit') as HTMLElement;
-    button.addEventListener('click', () => {
-      this.submit();
-    });
+    const button = document.getElementById('submit');
+    if (button) {
+      button.addEventListener('click', () => {
+        this.submit();
+      });
+    }
   }
 
   submit() {}
