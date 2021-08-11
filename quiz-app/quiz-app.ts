@@ -22,7 +22,6 @@ class Quiz {
 
   constructor(public page: number) {
     this.page = page;
-    this.setup();
   }
 
   setup() {
@@ -38,10 +37,11 @@ class Quiz {
 class App {
   page = 0;
   result = 0;
+  quiz = new Quiz(this.page);
   inputs = document.querySelectorAll<HTMLInputElement>('input');
 
   constructor() {
-    new Quiz(this.page);
+    this.quiz.setup();
     this.setEvent();
   }
 
