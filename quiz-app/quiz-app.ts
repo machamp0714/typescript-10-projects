@@ -1,14 +1,14 @@
 // 仕様: https://10projects10hours.netlify.app/quiz-app/index.html
 
 class Quiz {
-  static questions = [
+  questions = [
     'What is the most used programming language in 2019?',
     'Who is the President of US?',
     'What does HTML stand for?',
     'What year was JavaScript launched?',
   ];
 
-  static answers = [
+  answers = [
     ['Java', 'C', 'Python', 'JavaScript'],
     ['Florin Pop', 'Donald Trump', 'Ivan Saldano', 'Mihai Andrei'],
     [
@@ -27,10 +27,10 @@ class Quiz {
 
   setup() {
     const question = document.getElementById('question');
-    if (question) question.innerText = Quiz.questions[this.page];
+    if (question) question.innerText = this.questions[this.page];
 
     document.querySelectorAll<HTMLLabelElement>('label').forEach((label, index) => {
-      label.innerText = Quiz.answers[this.page][index];
+      label.innerText = this.answers[this.page][index];
     });
   }
 }
