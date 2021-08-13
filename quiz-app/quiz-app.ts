@@ -23,6 +23,10 @@ class Quiz {
   ];
   answers = ['Java', 'Donald Trump', 'Hypertext Markup Language', '1995'];
 
+  get count() {
+    return this.choices.length;
+  }
+
   isCorrect(value: string, page: number) {
     return this.answers[page] === value;
   }
@@ -71,11 +75,34 @@ class App {
       this.result++;
     }
     this.page++;
-    this.quiz.setup(this.page);
+
+    if (this.isFinished()) {
+      this.displayResult();
+    } else {
+      this.quiz.setup(this.page);
+    }
+  }
+
+  displayResult() {
+    const body = document.querySelector<HTMLElement>('body');
+    if (body) {
+      body.innerHTML = '';
+      body.innerHTML = `
+      <div class="quiz-container" id="quiz">
+        <h2>You answered correctly at ${this.result}/${this.quiz.count} questions.</h2>
+
+        <button onclick="location.reload()">Reload</button>
+      </div>
+      `;
+    }
   }
 
   isAnyRadioButtonsChecked() {
     return this.inputs.some((input) => input.checked);
+  }
+
+  isFinished() {
+    return this.page === this.quiz.count;
   }
 }
 
