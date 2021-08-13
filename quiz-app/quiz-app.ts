@@ -56,6 +56,10 @@ class App {
     this.setEvent();
   }
 
+  static start() {
+    new App();
+  }
+
   setEvent() {
     const button = document.getElementById('submit');
     if (button) {
@@ -106,4 +110,4 @@ class App {
   }
 }
 
-new App();
+App.start();
