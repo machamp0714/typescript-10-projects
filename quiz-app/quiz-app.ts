@@ -88,17 +88,14 @@ class App {
   }
 
   displayResult() {
-    const body = document.querySelector<HTMLElement>('body');
-    if (body) {
-      body.innerHTML = '';
-      body.innerHTML = `
-      <div class="quiz-container" id="quiz">
-        <h2>You answered correctly at ${this.score}/${this.quiz.count} questions.</h2>
+    const body = document.querySelector<HTMLElement>('body') as HTMLElement;
+    body.innerHTML = `
+    <div class="quiz-container" id="quiz">
+      <h2>You answered correctly at ${this.score}/${this.quiz.count} questions.</h2>
 
-        <button onclick="location.reload()">Reload</button>
-      </div>
-      `;
-    }
+      <button onclick="location.reload()">Reload</button>
+    </div>
+    `;
   }
 
   isAnyRadioButtonsChecked() {
