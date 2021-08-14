@@ -70,7 +70,8 @@
   },
   "include": [
     "countdown-timer/**/*",
-    "quiZ-app/**/*"
+    "quiz-app/**/*",
+    "recipe-app/**/*"
   ],
   "exclude": [
     "dist"
