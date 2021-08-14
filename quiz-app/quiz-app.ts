@@ -27,32 +27,32 @@ class Quiz {
     return this.choices.length;
   }
 
-  isCorrect(value: string, page: number) {
-    return this.answers[page] === value;
+  isCorrect(value: string, currentQuiz: number) {
+    return this.answers[currentQuiz] === value;
   }
 
-  setup(page: number) {
+  setup(currentQuiz: number) {
     const question = document.getElementById('question');
-    if (question) question.innerText = this.questions[page];
+    if (question) question.innerText = this.questions[currentQuiz];
 
     this.inputs.forEach((input, index) => {
       input.checked = false;
-      input.value = this.choices[page][index];
+      input.value = this.choices[currentQuiz][index];
     });
     this.labels.forEach((label, index) => {
-      label.innerText = this.choices[page][index];
+      label.innerText = this.choices[currentQuiz][index];
     });
   }
 }
 
 class App {
-  page = 0;
-  result = 0;
+  currentQuiz = 0;
+  score = 0;
   quiz = new Quiz();
   inputs = Array.from(document.querySelectorAll<HTMLInputElement>('input'));
 
   constructor() {
-    this.quiz.setup(this.page);
+    this.quiz.setup(this.currentQuiz);
     this.setEvent();
   }
 
@@ -75,15 +75,15 @@ class App {
     }
 
     const checkedInput = this.inputs.find((input) => input.checked) as HTMLInputElement;
-    if (this.quiz.isCorrect(checkedInput.value, this.page)) {
-      this.result++;
+    if (this.quiz.isCorrect(checkedInput.value, this.currentQuiz)) {
+      this.score++;
     }
-    this.page++;
+    this.currentQuiz++;
 
     if (this.isFinished()) {
       this.displayResult();
     } else {
-      this.quiz.setup(this.page);
+      this.quiz.setup(this.currentQuiz);
     }
   }
 
@@ -93,7 +93,7 @@ class App {
       body.innerHTML = '';
       body.innerHTML = `
       <div class="quiz-container" id="quiz">
-        <h2>You answered correctly at ${this.result}/${this.quiz.count} questions.</h2>
+        <h2>You answered correctly at ${this.score}/${this.quiz.count} questions.</h2>
 
         <button onclick="location.reload()">Reload</button>
       </div>
@@ -106,7 +106,7 @@ class App {
   }
 
   isFinished() {
-    return this.page === this.quiz.count;
+    return this.currentQuiz === this.quiz.count;
   }
 }
 
