@@ -1,110 +1,115 @@
 // 仕様: https://10projects10hours.netlify.app/quiz-app/index.html
 
+type QuizData = {
+  question: string;
+  a: string;
+  b: string;
+  c: string;
+  d: string;
+  correct: 'a' | 'b' | 'c' | 'd';
+};
+
 class Quiz {
-  inputs = document.querySelectorAll<HTMLInputElement>('input');
-  labels = document.querySelectorAll<HTMLLabelElement>('label');
-  questions = [
-    'What is the most used programming language in 2019?',
-    'Who is the President of US?',
-    'What does HTML stand for?',
-    'What year was JavaScript launched?',
+  private currentQuiz = 0;
+  private score = 0;
+  private questionEl = document.getElementById('question') as HTMLElement;
+  private answerEls = document.querySelectorAll<HTMLInputElement>('input');
+  private a_text = document.getElementById('a_text') as HTMLElement;
+  private b_text = document.getElementById('b_text') as HTMLElement;
+  private c_text = document.getElementById('c_text') as HTMLElement;
+  private d_text = document.getElementById('d_text') as HTMLElement;
+  private submitButton = document.getElementById('submit') as HTMLElement;
+
+  quizData: QuizData[] = [
+    {
+      question: 'What is the most used programming language in 2019?',
+      a: 'Java',
+      b: 'C',
+      c: 'Python',
+      d: 'JavaScript',
+      correct: 'd',
+    },
+    {
+      question: 'Who is the President of US?',
+      a: 'Florin Pop',
+      b: 'Donald Trump',
+      c: 'Ivan Saldano',
+      d: 'Mihai Andrei',
+      correct: 'b',
+    },
+    {
+      question: 'What does HTML stand for?',
+      a: 'Hypertext Markup Language',
+      b: 'Cascading Style Sheet',
+      c: 'Jason Object Notation',
+      d: 'Helicopters Terminals Motorboats Lamborginis',
+      correct: 'a',
+    },
+    {
+      question: 'What year was JavaScript launched?',
+      a: '1996',
+      b: '1995',
+      c: '1994',
+      d: 'none of the above',
+      correct: 'b',
+    },
   ];
 
-  choices = [
-    ['Java', 'C', 'Python', 'JavaScript'],
-    ['Florin Pop', 'Donald Trump', 'Ivan Saldano', 'Mihai Andrei'],
-    [
-      'Hypertext Markup Language',
-      'Cascading Style Sheet',
-      'Jason Object Notation',
-      'Helicopters Terminals Motorboats Lamborginis',
-    ],
-    ['1996', '1995', '1994', 'none of the above'],
-  ];
-  answers = ['Java', 'Donald Trump', 'Hypertext Markup Language', '1995'];
-
-  get count() {
-    return this.choices.length;
-  }
-
-  isCorrect(value: string, currentQuiz: number) {
-    return this.answers[currentQuiz] === value;
-  }
-
-  setup(currentQuiz: number) {
-    const question = document.getElementById('question');
-    if (question) question.innerText = this.questions[currentQuiz];
-
-    this.inputs.forEach((input, index) => {
-      input.checked = false;
-      input.value = this.choices[currentQuiz][index];
-    });
-    this.labels.forEach((label, index) => {
-      label.innerText = this.choices[currentQuiz][index];
-    });
-  }
-}
-
-class App {
-  currentQuiz = 0;
-  score = 0;
-  quiz = new Quiz();
-  inputs = Array.from(document.querySelectorAll<HTMLInputElement>('input'));
-
-  constructor() {
-    this.quiz.setup(this.currentQuiz);
-    this.setEvent();
+  get quizCount() {
+    return this.quizData.length;
   }
 
   static start() {
-    new App();
+    new Quiz().setup();
   }
 
-  setEvent() {
-    const button = document.getElementById('submit');
-    if (button) {
-      button.addEventListener('click', () => {
-        this.submit();
-      });
-    }
+  setup() {
+    this.deselectAnswers();
+    const currentQuizData = this.quizData[this.currentQuiz];
+
+    this.questionEl.innerText = currentQuizData.question;
+    this.a_text.innerText = currentQuizData.a;
+    this.b_text.innerText = currentQuizData.b;
+    this.c_text.innerText = currentQuizData.c;
+    this.d_text.innerText = currentQuizData.d;
+
+    this.submitButton.addEventListener('click', () => this.submit());
   }
 
   submit() {
-    if (!this.isAnyRadioButtonsChecked()) {
-      return;
-    }
+    const answer = Array.from(this.answerEls).find((el) => el.checked);
+    if (answer) {
+      if (this.isCorrect(answer)) {
+        this.score++;
+      }
 
-    const checkedInput = this.inputs.find((input) => input.checked) as HTMLInputElement;
-    if (this.quiz.isCorrect(checkedInput.value, this.currentQuiz)) {
-      this.score++;
+      this.currentQuiz++;
+      if (this.currentQuiz < this.quizCount) {
+        this.setup();
+      } else {
+        this.displayResult();
+      }
     }
-    this.currentQuiz++;
+  }
 
-    if (this.isFinished()) {
-      this.displayResult();
-    } else {
-      this.quiz.setup(this.currentQuiz);
-    }
+  isCorrect(answer: HTMLInputElement) {
+    return answer.id === this.quizData[this.currentQuiz].correct;
+  }
+
+  deselectAnswers() {
+    this.answerEls.forEach((el) => (el.checked = false));
   }
 
   displayResult() {
     const body = document.querySelector<HTMLElement>('body') as HTMLElement;
     body.innerHTML = `
     <div class="quiz-container" id="quiz">
-      <h2>You answered correctly at ${this.score}/${this.quiz.count} questions.</h2>
+      <h2>You answered correctly at ${this.score}/${this.quizCount} questions.</h2>
 
       <button onclick="location.reload()">Reload</button>
     </div>
     `;
   }
-
-  isAnyRadioButtonsChecked() {
-    return this.inputs.some((input) => input.checked);
-  }
-
-  isFinished() {
-    return this.currentQuiz === this.quiz.count;
-  }
 }
 
-App.start();
+Quiz.start();
